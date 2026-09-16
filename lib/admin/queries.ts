@@ -12,10 +12,7 @@ import {
 } from "@/lib/db/schema"
 import { and, eq, desc, inArray, lte, sql } from "drizzle-orm"
 
-export const ORDER_STATES = ["pending", "confirmed", "preparing", "out_for_delivery", "delivered", "cancelled"] as const
-export const PAYMENT_STATES = ["unpaid", "deposit_paid", "paid_in_full", "refunded"] as const
-export type OrderState = (typeof ORDER_STATES)[number]
-export type PaymentState = (typeof PAYMENT_STATES)[number]
+export { ORDER_STATES, PAYMENT_STATES, type OrderState, type PaymentState } from "@/lib/admin/labels"
 
 export async function getOverviewStats() {
   const [orderAgg] = await db

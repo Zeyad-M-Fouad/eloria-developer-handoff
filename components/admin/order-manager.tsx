@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { formatMoney } from "@/lib/money"
-import { ORDER_STATES, PAYMENT_STATES } from "@/lib/admin/queries"
+import { ORDER_STATES, PAYMENT_STATES } from "@/lib/admin/labels"
 import { ORDER_STATE_LABELS, PAYMENT_STATE_LABELS, paymentStateClass } from "@/lib/admin/labels"
 import { cn } from "@/lib/utils"
 import {

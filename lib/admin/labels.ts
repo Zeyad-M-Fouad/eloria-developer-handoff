@@ -1,3 +1,8 @@
+export const ORDER_STATES = ["pending", "confirmed", "preparing", "out_for_delivery", "delivered", "cancelled"] as const
+export const PAYMENT_STATES = ["unpaid", "deposit_paid", "paid_in_full", "refunded"] as const
+export type OrderState = (typeof ORDER_STATES)[number]
+export type PaymentState = (typeof PAYMENT_STATES)[number]
+
 export const ORDER_STATE_LABELS: Record<string, string> = {
   pending: "Pending",
   confirmed: "Confirmed",
