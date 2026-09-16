@@ -5,6 +5,7 @@ import { NotificationFeed } from "@/components/admin/notification-feed"
 import { formatMoney } from "@/lib/money"
 
 export const metadata = { title: "Admin overview" }
+export const dynamic = "force-dynamic"
 
 export default async function AdminOverviewPage() {
   const [stats, notifications, lowStock] = await Promise.all([

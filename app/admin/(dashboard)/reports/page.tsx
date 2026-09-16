@@ -4,6 +4,7 @@ import { getSalesReport, getOverviewStats } from "@/lib/admin/queries"
 import { formatMoney } from "@/lib/money"
 
 export const metadata = { title: "Reports" }
+export const dynamic = "force-dynamic"
 
 export default async function ReportsPage() {
   const [report, stats] = await Promise.all([getSalesReport(), getOverviewStats()])

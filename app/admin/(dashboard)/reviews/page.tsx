@@ -4,6 +4,7 @@ import { ReviewModerationList } from "@/components/admin/review-moderation-list"
 import { cn } from "@/lib/utils"
 
 export const metadata = { title: "Reviews" }
+export const dynamic = "force-dynamic"
 
 const TABS = [
   { key: "pending", label: "Pending" },

@@ -6,6 +6,8 @@ import { ProductDetail } from "@/components/store/product-detail"
 import { ReviewsSection } from "@/components/store/reviews-section"
 import { getProductBySlug, getPublishedReviews } from "@/lib/store/queries"
 
+export const dynamic = "force-dynamic"
+
 export async function generateMetadata({
   params,
 }: {

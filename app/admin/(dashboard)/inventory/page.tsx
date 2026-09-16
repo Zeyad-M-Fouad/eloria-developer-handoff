@@ -2,6 +2,7 @@ import { getAllCombinationsWithProduct } from "@/lib/admin/queries"
 import { InventoryRow } from "@/components/admin/inventory-row"
 
 export const metadata = { title: "Inventory" }
+export const dynamic = "force-dynamic"
 
 export default async function InventoryPage() {
   const rows = await getAllCombinationsWithProduct()

@@ -3,6 +3,7 @@ import { getReturns } from "@/lib/admin/queries"
 import { cn } from "@/lib/utils"
 
 export const metadata = { title: "Cancellations & returns" }
+export const dynamic = "force-dynamic"
 
 function formatDate(d: Date | string) {
   return new Date(d).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" })
