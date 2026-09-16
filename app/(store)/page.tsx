@@ -5,6 +5,8 @@ import { Button } from "@/components/ui/button"
 import { ProductCard } from "@/components/store/product-card"
 import { getActiveProducts } from "@/lib/store/queries"
 
+export const dynamic = "force-dynamic"
+
 export default async function HomePage() {
   const products = await getActiveProducts()
   const featured = products.slice(0, 4)

@@ -2,6 +2,8 @@ import type { Metadata } from "next"
 import { Catalog } from "@/components/store/catalog"
 import { getActiveProducts, getCategories } from "@/lib/store/queries"
 
+export const dynamic = "force-dynamic"
+
 export const metadata: Metadata = {
   title: "Shop all",
   description: "Browse Eloria's small-batch botanical skincare — body lotion, hand cream, cleanser, and body oil.",
