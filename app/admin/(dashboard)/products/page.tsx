@@ -6,6 +6,7 @@ import { formatMoney, isOnSale } from "@/lib/money"
 import { cn } from "@/lib/utils"
 
 export const metadata = { title: "Products" }
+export const dynamic = "force-dynamic"
 
 export default async function AdminProductsPage() {
   const products = await getAdminProducts()

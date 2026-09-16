@@ -4,6 +4,8 @@ import { auth } from "@/lib/auth"
 import { getOrders, ORDER_STATES, type OrderState } from "@/lib/admin/queries"
 import { ORDER_STATE_LABELS, PAYMENT_STATE_LABELS } from "@/lib/admin/labels"
 
+export const dynamic = "force-dynamic"
+
 function csvCell(value: unknown): string {
   const s = value == null ? "" : String(value)
   if (/[",\n]/.test(s)) return `"${s.replace(/"/g, '""')}"`

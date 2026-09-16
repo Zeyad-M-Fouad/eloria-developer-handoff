@@ -8,6 +8,7 @@ export const metadata: Metadata = {
   title: "Write a review",
   description: "Share your experience with an Eloria product. You'll need the order code from your purchase.",
 }
+export const dynamic = "force-dynamic"
 
 export default async function WriteAReviewPage() {
   const products = await getActiveProducts()

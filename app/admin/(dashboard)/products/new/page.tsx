@@ -4,6 +4,7 @@ import { getCategoriesList } from "@/lib/admin/queries"
 import { NewProductForm } from "@/components/admin/new-product-form"
 
 export const metadata = { title: "New product" }
+export const dynamic = "force-dynamic"
 
 export default async function NewProductPage() {
   const categories = await getCategoriesList()

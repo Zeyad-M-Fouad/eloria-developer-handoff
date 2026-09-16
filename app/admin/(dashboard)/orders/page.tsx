@@ -6,6 +6,7 @@ import { formatMoney } from "@/lib/money"
 import { cn } from "@/lib/utils"
 
 export const metadata = { title: "Orders" }
+export const dynamic = "force-dynamic"
 
 function formatDate(d: Date | string) {
   return new Date(d).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" })

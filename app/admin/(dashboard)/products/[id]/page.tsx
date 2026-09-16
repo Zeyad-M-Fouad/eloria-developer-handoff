@@ -6,6 +6,7 @@ import { EditProductForm } from "@/components/admin/edit-product-form"
 import { CombinationEditor } from "@/components/admin/combination-editor"
 
 export const metadata = { title: "Edit product" }
+export const dynamic = "force-dynamic"
 
 export default async function EditProductPage({
   params,
