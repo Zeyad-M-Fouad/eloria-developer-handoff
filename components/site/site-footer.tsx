@@ -52,7 +52,12 @@ export function SiteFooter() {
       <div className="border-t border-border/70">
         <div className="mx-auto flex max-w-6xl flex-col gap-1 px-4 py-6 text-xs text-muted-foreground md:flex-row md:items-center md:justify-between md:px-6">
           <p>© {new Date().getFullYear()} Eloria. All rights reserved.</p>
-          <p>Orders confirmed by WhatsApp · Deposit handled personally</p>
+          <div className="flex items-center gap-4">
+            <p>Orders confirmed by WhatsApp · Deposit handled personally</p>
+            <Link href="/admin" className="text-muted-foreground/70 hover:text-foreground">
+              Admin
+            </Link>
+          </div>
         </div>
       </div>
     </footer>
