@@ -53,7 +53,15 @@ export function NewProductForm({ categories }: { categories: { id: number; name:
     if (!name.trim()) return toast.error("Enter a product name.")
     if (!itemCode.trim()) return toast.error("Enter an item code.")
 
-    const combinations = []
+    const combinations: {
+      size: string | null
+      color: string | null
+      scent: string | null
+      priceCents: number
+      salePriceCents: number | null
+      availableQty: number
+      lowStockThreshold: number
+    }[] = []
     for (const r of rows) {
       const priceCents = poundsToCents(r.price)
       if (priceCents == null || priceCents === 0) return toast.error("Every variant needs a valid price.")

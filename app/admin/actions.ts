@@ -4,6 +4,7 @@ import { db } from "@/lib/db"
 import {
   products,
   productCombinations,
+  categories,
   orders,
   orderLines,
   paymentRecords,
@@ -224,6 +225,67 @@ export async function createReturn(input: {
   revalidatePath("/admin/returns")
   revalidatePath(`/admin/orders/${input.orderId}`)
   return { ok: true as const, refCode }
+}
+
+/* ------------------------------- Categories ------------------------------ */
+
+export async function createCategory(name: string) {
+  await requireAdmin()
+  const trimmed = name.trim().replace(/\s+/g, " ")
+  if (!trimmed) return { ok: false as const, error: "Category name is required." }
+  const slug = slugify(trimmed)
+  if (!slug) return { ok: false as const, error: "Enter a valid category name." }
+  try {
+    const [category] = await db.insert(categories).values({ name: trimmed, slug }).returning()
+    revalidatePath("/admin/categories")
+    revalidatePath("/admin/products")
+    revalidatePath("/products")
+    return { ok: true as const, category }
+  } catch (err: any) {
+    if (err?.code === "23505") return { ok: false as const, error: "That category already exists." }
+    console.error("[v0] createCategory failed:", err)
+    return { ok: false as const, error: "Could not create category." }
+  }
+}
+
+export async function updateCategory(id: number, name: string) {
+  await requireAdmin()
+  const trimmed = name.trim().replace(/\s+/g, " ")
+  if (!Number.isInteger(id) || !trimmed) return { ok: false as const, error: "Enter a valid category name." }
+  const slug = slugify(trimmed)
+  try {
+    const [category] = await db
+      .update(categories)
+      .set({ name: trimmed, slug })
+      .where(eq(categories.id, id))
+      .returning()
+    if (!category) return { ok: false as const, error: "Category not found." }
+    revalidatePath("/admin/categories")
+    revalidatePath("/admin/products")
+    revalidatePath("/products")
+    return { ok: true as const, category }
+  } catch (err: any) {
+    if (err?.code === "23505") return { ok: false as const, error: "That category already exists." }
+    console.error("[v0] updateCategory failed:", err)
+    return { ok: false as const, error: "Could not update category." }
+  }
+}
+
+export async function deleteCategory(id: number) {
+  await requireAdmin()
+  if (!Number.isInteger(id)) return { ok: false as const, error: "Invalid category." }
+  try {
+    await db.update(products).set({ categoryId: null }).where(eq(products.categoryId, id))
+    const deleted = await db.delete(categories).where(eq(categories.id, id)).returning({ id: categories.id })
+    if (deleted.length === 0) return { ok: false as const, error: "Category not found." }
+    revalidatePath("/admin/categories")
+    revalidatePath("/admin/products")
+    revalidatePath("/products")
+    return { ok: true as const }
+  } catch (err) {
+    console.error("[v0] deleteCategory failed:", err)
+    return { ok: false as const, error: "Could not delete category." }
+  }
 }
 
 /* -------------------------------- Products ------------------------------- */
