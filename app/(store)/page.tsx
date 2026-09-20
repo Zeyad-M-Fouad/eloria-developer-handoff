@@ -4,6 +4,7 @@ import { MessageCircle, Leaf, HandHeart } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { ProductCard } from "@/components/store/product-card"
 import { FaqSection } from "@/components/store/faq-section"
+import { ContactForm } from "@/components/store/contact-form"
 import { getActiveProducts } from "@/lib/store/queries"
 
 export const dynamic = "force-dynamic"
@@ -97,6 +98,19 @@ export default async function HomePage() {
       </section>
 
       <FaqSection />
+
+      <section id="contact" className="mx-auto max-w-6xl scroll-mt-24 px-4 py-16 md:px-6 md:py-20">
+        <div className="mx-auto mb-8 max-w-2xl text-center">
+          <p className="text-sm uppercase tracking-[0.2em] text-muted-foreground">Get in touch</p>
+          <h2 className="mt-3 font-serif text-3xl text-foreground">We&apos;re here to help</h2>
+          <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+            Have a question about a product or your order? Send us a message and we&apos;ll get back to you shortly.
+          </p>
+        </div>
+        <div className="mx-auto max-w-3xl">
+          <ContactForm />
+        </div>
+      </section>
     </div>
   )
 }
