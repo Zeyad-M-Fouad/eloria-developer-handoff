@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 import { MessageCircle, Mail, Clock } from "lucide-react"
+import { ContactForm } from "@/components/store/contact-form"
 
 export const metadata: Metadata = {
   title: "Contact",
@@ -45,6 +46,14 @@ export default function ContactPage() {
             We reply to messages daily. Orders placed overnight are confirmed the next morning.
           </p>
         </div>
+      </div>
+
+      <div className="mt-12">
+        <h2 className="font-serif text-3xl text-foreground">Send us a message</h2>
+        <p className="mt-2 mb-6 text-sm leading-relaxed text-muted-foreground">
+          For order-related questions, include your order code so we can help quickly.
+        </p>
+        <ContactForm />
       </div>
     </div>
   )

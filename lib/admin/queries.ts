@@ -12,6 +12,8 @@ import {
 } from "@/lib/db/schema"
 import { and, eq, desc, inArray, lte, sql } from "drizzle-orm"
 
+import { ORDER_STATES, PAYMENT_STATES, type OrderState, type PaymentState } from "@/lib/admin/labels"
+
 export { ORDER_STATES, PAYMENT_STATES, type OrderState, type PaymentState } from "@/lib/admin/labels"
 
 export async function getOverviewStats() {
