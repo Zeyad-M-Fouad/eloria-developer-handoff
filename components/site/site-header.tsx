@@ -9,7 +9,7 @@ import { useCart } from "@/components/cart/cart-provider"
 
 const NAV = [
   { href: "/products", label: "Shop" },
-  { href: "/faq", label: "FAQ" },
+  { href: "/#faq", label: "FAQ" },
   { href: "/shipping", label: "Shipping" },
   { href: "/contact", label: "Contact" },
 ]
@@ -33,7 +33,7 @@ export function SiteHeader() {
                 href={item.href}
                 className={cn(
                   "text-sm transition-colors hover:text-foreground",
-                  pathname === item.href ? "text-foreground" : "text-muted-foreground",
+                  item.href === "/#faq" ? pathname === "/" : pathname === item.href ? "text-foreground" : "text-muted-foreground",
                 )}
               >
                 {item.label}

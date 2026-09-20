@@ -3,6 +3,7 @@ import Image from "next/image"
 import { MessageCircle, Leaf, HandHeart } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { ProductCard } from "@/components/store/product-card"
+import { FaqSection } from "@/components/store/faq-section"
 import { getActiveProducts } from "@/lib/store/queries"
 
 export const dynamic = "force-dynamic"
@@ -30,7 +31,7 @@ export default async function HomePage() {
                 Shop the collection
               </Button>
               <Button
-                render={<Link href="/faq" />}
+                render={<Link href="/#faq" />}
                 size="lg"
                 variant="outline"
                 className="rounded-full bg-transparent"
@@ -94,6 +95,8 @@ export default async function HomePage() {
           <p className="mt-10 text-muted-foreground">Products are coming soon.</p>
         )}
       </section>
+
+      <FaqSection />
     </div>
   )
 }
