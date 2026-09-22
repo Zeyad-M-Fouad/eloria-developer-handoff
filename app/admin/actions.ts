@@ -77,6 +77,7 @@ async function maybeLowStockAlert(combinationId: number) {
 
 export async function adjustStock(combinationId: number, delta: number, reason: string) {
   await requireAdmin()
+  await logAdminAction({ action: "adjust_stock", entityType: "combination", entityId: combinationId, details: { delta, reason } })
   if (!Number.isInteger(delta) || delta === 0) return { ok: false as const, error: "Enter a non-zero whole number." }
   await db
     .update(productCombinations)
@@ -95,15 +96,16 @@ export async function adjustStock(combinationId: number, delta: number, reason: 
 
 export async function setOnTheWay(combinationId: number, qty: number) {
   await requireAdmin()
+  await logAdminAction({ action: "set_on_the_way", entityType: "combination", entityId: combinationId, details: { quantity: qty } })
   if (!Number.isInteger(qty) || qty < 0) return { ok: false as const, error: "Enter a valid quantity." }
   await db.update(productCombinations).set({ onTheWayQty: qty }).where(eq(productCombinations.id, combinationId))
-  await logAdminAction({ action: "set_on_the_way", entityType: "combination", entityId: combinationId, details: { quantity: qty } })
   revalidatePath("/admin/inventory")
   return { ok: true as const }
 }
 
 export async function receiveOnTheWay(combinationId: number, qty: number) {
   await requireAdmin()
+  await logAdminAction({ action: "receive_on_the_way", entityType: "combination", entityId: combinationId, details: { quantity: qty } })
   const [c] = await db.select().from(productCombinations).where(eq(productCombinations.id, combinationId)).limit(1)
   if (!c) return { ok: false as const, error: "Not found." }
   const received = Math.min(qty, c.onTheWayQty)
@@ -125,6 +127,7 @@ export async function receiveOnTheWay(combinationId: number, qty: number) {
 
 export async function updateOrderState(orderId: number, newState: OrderState) {
   await requireAdmin()
+  await logAdminAction({ action: "update_order_state", entityType: "order", entityId: orderId, details: { state: newState } })
   if (!ORDER_STATES.includes(newState)) return { ok: false as const, error: "Invalid state." }
   const [order] = await db.select().from(orders).where(eq(orders.id, orderId)).limit(1)
   if (!order) return { ok: false as const, error: "Order not found." }
@@ -172,6 +175,7 @@ export async function recordPayment(input: {
   note?: string
 }) {
   await requireAdmin()
+  await logAdminAction({ action: "record_payment", entityType: "order", entityId: input.orderId, details: { kind: input.kind, amountCents: input.amountCents } })
   const { orderId, kind, amountCents } = input
   if (!["deposit", "balance", "full", "refund"].includes(kind)) return { ok: false as const, error: "Invalid type." }
   if (!Number.isInteger(amountCents) || amountCents <= 0) return { ok: false as const, error: "Enter a valid amount." }
@@ -184,6 +188,7 @@ export async function recordPayment(input: {
 
 export async function setAgreedTotal(orderId: number, agreedTotalCents: number | null) {
   await requireAdmin()
+  await logAdminAction({ action: "set_agreed_total", entityType: "order", entityId: orderId, details: { agreedTotalCents } })
   if (agreedTotalCents != null && (!Number.isInteger(agreedTotalCents) || agreedTotalCents < 0))
     return { ok: false as const, error: "Enter a valid total." }
   await db.update(orders).set({ agreedTotalCents, updatedAt: new Date() }).where(eq(orders.id, orderId))
@@ -194,6 +199,7 @@ export async function setAgreedTotal(orderId: number, agreedTotalCents: number |
 
 export async function updateOrderNotes(orderId: number, notes: string) {
   await requireAdmin()
+  await logAdminAction({ action: "update_order_notes", entityType: "order", entityId: orderId })
   await db.update(orders).set({ notes, updatedAt: new Date() }).where(eq(orders.id, orderId))
   revalidatePath(`/admin/orders/${orderId}`)
   return { ok: true as const }
@@ -207,6 +213,7 @@ export async function createReturn(input: {
   receivedBack: boolean
 }) {
   await requireAdmin()
+  await logAdminAction({ action: "create_return", entityType: "order", entityId: input.orderId, details: { type: input.type, outcome: input.outcome } })
   const [order] = await db.select().from(orders).where(eq(orders.id, input.orderId)).limit(1)
   if (!order) return { ok: false as const, error: "Order not found." }
   const refCode = generateRefCode(input.type === "return" ? "RET" : "CAN")
@@ -233,6 +240,7 @@ export async function createReturn(input: {
 
 export async function createCategory(name: string) {
   await requireAdmin()
+  await logAdminAction({ action: "create_category", entityType: "category", details: { name: name.trim() } })
   const trimmed = name.trim().replace(/\s+/g, " ")
   if (!trimmed) return { ok: false as const, error: "Category name is required." }
   const slug = slugify(trimmed)
@@ -316,6 +324,7 @@ export async function createProduct(input: {
   combinations: CombinationInput[]
 }) {
   await requireAdmin()
+  await logAdminAction({ action: "create_product", entityType: "product", details: { name: input.name, itemCode: input.itemCode } })
   if (!input.name.trim()) return { ok: false as const, error: "Name is required." }
   if (!input.itemCode.trim()) return { ok: false as const, error: "Item code is required." }
   if (input.combinations.length === 0) return { ok: false as const, error: "Add at least one variant." }
@@ -370,6 +379,7 @@ export async function updateProduct(input: {
   isActive: boolean
 }) {
   await requireAdmin()
+  await logAdminAction({ action: "update_product", entityType: "product", entityId: input.id, details: { name: input.name, itemCode: input.itemCode } })
   try {
     await db
       .update(products)
@@ -398,6 +408,7 @@ export async function updateProduct(input: {
 
 export async function toggleProductActive(id: number, isActive: boolean) {
   await requireAdmin()
+  await logAdminAction({ action: "toggle_product_active", entityType: "product", entityId: id, details: { isActive } })
   await db.update(products).set({ isActive, updatedAt: new Date() }).where(eq(products.id, id))
   revalidatePath("/admin/products")
   return { ok: true as const }
@@ -415,6 +426,7 @@ export async function upsertCombination(input: {
   lowStockThreshold?: number
 }) {
   await requireAdmin()
+  await logAdminAction({ action: input.id ? "update_combination" : "create_combination", entityType: "combination", entityId: input.id ?? input.productId, details: { productId: input.productId } })
   if (!Number.isInteger(input.priceCents) || input.priceCents < 0)
     return { ok: false as const, error: "Enter a valid price." }
   if (input.salePriceCents != null && input.salePriceCents >= input.priceCents)
@@ -453,6 +465,7 @@ export async function upsertCombination(input: {
 
 export async function deleteCombination(id: number, productId: number) {
   await requireAdmin()
+  await logAdminAction({ action: "delete_combination", entityType: "combination", entityId: id, details: { productId } })
   await db.delete(productCombinations).where(eq(productCombinations.id, id))
   revalidatePath(`/admin/products/${productId}`)
   return { ok: true as const }
@@ -496,6 +509,7 @@ export async function deleteReview(id: number) {
 
 export async function markNotificationRead(id: number) {
   await requireAdmin()
+  await logAdminAction({ action: "mark_notification_read", entityType: "notification", entityId: id })
   await db.update(notifications).set({ isRead: true }).where(eq(notifications.id, id))
   revalidatePath("/admin")
   return { ok: true as const }
@@ -503,6 +517,7 @@ export async function markNotificationRead(id: number) {
 
 export async function markAllNotificationsRead() {
   await requireAdmin()
+  await logAdminAction({ action: "mark_all_notifications_read", entityType: "notification" })
   await db.update(notifications).set({ isRead: true }).where(eq(notifications.isRead, false))
   revalidatePath("/admin")
   return { ok: true as const }

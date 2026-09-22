@@ -2,6 +2,7 @@ import { headers } from "next/headers"
 import { auth } from "@/lib/auth"
 import { db } from "@/lib/db"
 import { auditLogs } from "@/lib/db/schema"
+import { desc } from "drizzle-orm"
 
 type AuditInput = {
   action: string
@@ -24,5 +25,5 @@ export async function logAdminAction(input: AuditInput) {
 }
 
 export async function getAuditLogs(limit = 100) {
-  return db.select().from(auditLogs).orderBy(auditLogs.createdAt).limit(limit)
+  return db.select().from(auditLogs).orderBy(desc(auditLogs.createdAt)).limit(limit)
 }
