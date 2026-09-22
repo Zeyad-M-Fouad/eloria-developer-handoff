@@ -132,8 +132,18 @@ export async function getAllCombinationsWithProduct() {
   const combos = await db.select().from(productCombinations).orderBy(productCombinations.productId)
   const ids = [...new Set(combos.map((c) => c.productId))]
   const prods = ids.length ? await db.select().from(products).where(inArray(products.id, ids)) : []
-  const map = new Map(prods.map((p) => [p.id, p]))
-  return combos.map((c) => ({ combo: c, product: map.get(c.productId) ?? null }))
+  const categoryIds = [...new Set(prods.map((p) => p.categoryId).filter((id): id is number => id !== null))]
+  const categoryRows = categoryIds.length ? await db.select().from(categories).where(inArray(categories.id, categoryIds)) : []
+  const productMap = new Map(prods.map((p) => [p.id, p]))
+  const categoryMap = new Map(categoryRows.map((category) => [category.id, category.name]))
+  return combos.map((c) => {
+    const product = productMap.get(c.productId) ?? null
+    return {
+      combo: c,
+      product,
+      categoryName: product?.categoryId ? categoryMap.get(product.categoryId) ?? "Uncategorized" : "Uncategorized",
+    }
+  })
 }
 
 export async function getReviewsByStatus(status: "pending" | "published" | "rejected") {
