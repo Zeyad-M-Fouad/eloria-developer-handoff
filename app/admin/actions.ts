@@ -19,6 +19,7 @@ import { requireAdmin } from "@/lib/admin/guard"
 import { createNotification } from "@/lib/notifications"
 import { generateRefCode } from "@/lib/store/order-code"
 import { ORDER_STATES, PAYMENT_STATES, type OrderState } from "@/lib/admin/queries"
+import { logAdminAction } from "@/lib/admin/audit"
 
 function slugify(input: string): string {
   return input
@@ -96,6 +97,7 @@ export async function setOnTheWay(combinationId: number, qty: number) {
   await requireAdmin()
   if (!Number.isInteger(qty) || qty < 0) return { ok: false as const, error: "Enter a valid quantity." }
   await db.update(productCombinations).set({ onTheWayQty: qty }).where(eq(productCombinations.id, combinationId))
+  await logAdminAction({ action: "set_on_the_way", entityType: "combination", entityId: combinationId, details: { quantity: qty } })
   revalidatePath("/admin/inventory")
   return { ok: true as const }
 }
@@ -260,6 +262,7 @@ export async function updateCategory(id: number, name: string) {
       .where(eq(categories.id, id))
       .returning()
     if (!category) return { ok: false as const, error: "Category not found." }
+    await logAdminAction({ action: "update_category", entityType: "category", entityId: id, details: { name: trimmed } })
     revalidatePath("/admin/categories")
     revalidatePath("/admin/products")
     revalidatePath("/products")
@@ -278,6 +281,7 @@ export async function deleteCategory(id: number) {
     await db.update(products).set({ categoryId: null }).where(eq(products.categoryId, id))
     const deleted = await db.delete(categories).where(eq(categories.id, id)).returning({ id: categories.id })
     if (deleted.length === 0) return { ok: false as const, error: "Category not found." }
+    await logAdminAction({ action: "delete_category", entityType: "category", entityId: id })
     revalidatePath("/admin/categories")
     revalidatePath("/admin/products")
     revalidatePath("/products")
@@ -462,6 +466,7 @@ export async function moderateReview(id: number, status: "published" | "rejected
     .update(reviews)
     .set({ status, ...(status === "rejected" ? { featuredOnHome: false } : {}) })
     .where(eq(reviews.id, id))
+  await logAdminAction({ action: "moderate_review", entityType: "review", entityId: id, details: { status } })
   revalidatePath("/admin/reviews")
   revalidatePath("/admin")
   revalidatePath("/")
@@ -471,6 +476,7 @@ export async function moderateReview(id: number, status: "published" | "rejected
 export async function setReviewFeaturedOnHome(id: number, featured: boolean) {
   await requireAdmin()
   await db.update(reviews).set({ featuredOnHome: featured }).where(eq(reviews.id, id))
+  await logAdminAction({ action: "feature_review", entityType: "review", entityId: id, details: { featured } })
   revalidatePath("/admin/reviews")
   revalidatePath("/")
   return { ok: true as const }
@@ -479,6 +485,7 @@ export async function setReviewFeaturedOnHome(id: number, featured: boolean) {
 export async function deleteReview(id: number) {
   await requireAdmin()
   await db.delete(reviews).where(eq(reviews.id, id))
+  await logAdminAction({ action: "delete_review", entityType: "review", entityId: id })
   revalidatePath("/admin/reviews")
   revalidatePath("/admin")
   revalidatePath("/")
