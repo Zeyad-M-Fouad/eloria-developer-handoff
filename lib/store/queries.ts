@@ -57,8 +57,7 @@ export async function getCategories(): Promise<Category[]> {
   return db.select().from(categories).orderBy(categories.name)
 }
 
-export async function getActiveProducts(): Promise<StoreProduct[]> {
-  const rows = await db.select().from(products).where(eq(products.isActive, true)).orderBy(products.id)
+async function assembleProducts(rows: (typeof products.$inferSelect)[]): Promise<StoreProduct[]> {
   if (rows.length === 0) return []
 
   const ids = rows.map((r) => r.id)
@@ -73,6 +72,21 @@ export async function getActiveProducts(): Promise<StoreProduct[]> {
       p.categoryId != null ? (catMap.get(p.categoryId) ?? null) : null,
     ),
   )
+}
+
+export async function getActiveProducts(): Promise<StoreProduct[]> {
+  const rows = await db.select().from(products).where(eq(products.isActive, true)).orderBy(products.id)
+  return assembleProducts(rows)
+}
+
+export async function getFeaturedProducts(): Promise<StoreProduct[]> {
+  const rows = await db
+    .select()
+    .from(products)
+    .where(eq(products.isActive, true))
+    .orderBy(products.id)
+    .limit(4)
+  return assembleProducts(rows)
 }
 
 export async function getProductBySlug(slug: string): Promise<StoreProduct | null> {
