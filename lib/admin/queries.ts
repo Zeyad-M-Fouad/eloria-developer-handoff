@@ -13,6 +13,7 @@ import {
 import { and, eq, desc, inArray, lte, sql } from "drizzle-orm"
 
 import { ORDER_STATES, PAYMENT_STATES, type OrderState, type PaymentState } from "@/lib/admin/labels"
+import { calculatePaymentMetrics } from "@/lib/admin/payment-metrics"
 
 export { ORDER_STATES, PAYMENT_STATES, type OrderState, type PaymentState } from "@/lib/admin/labels"
 
@@ -32,9 +33,8 @@ export async function getOverviewStats() {
     })
     .from(orders)
 
-  const [paymentsAgg] = await db
-    .select({ collected: sql<number>`coalesce(sum(${paymentRecords.amountCents}) filter (where ${paymentRecords.kind} != 'refund'), 0)::int` })
-    .from(paymentRecords)
+  const paymentRows = await db.select({ kind: paymentRecords.kind, amountCents: paymentRecords.amountCents }).from(paymentRecords)
+  const paymentsAgg = calculatePaymentMetrics(paymentRows)
 
   const [lowStockAgg] = await db
     .select({ value: sql<number>`count(*)::int` })
@@ -57,7 +57,9 @@ export async function getOverviewStats() {
     deliveredOrders: orderAgg?.delivered ?? 0,
     deliveredRevenueCents: revenueAgg?.deliveredRevenue ?? 0,
     depositsHeldCents: revenueAgg?.depositsHeld ?? 0,
-    collectedCents: paymentsAgg?.collected ?? 0,
+    grossCollectionsCents: paymentsAgg.grossCollectionsCents,
+    refundsCents: paymentsAgg.refundsCents,
+    netCollectionsCents: paymentsAgg.netCollectionsCents,
     lowStockCount: lowStockAgg?.value ?? 0,
     pendingReviews: reviewAgg?.value ?? 0,
     unreadNotifications: notifAgg?.value ?? 0,

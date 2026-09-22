@@ -2,7 +2,7 @@ import Link from "next/link"
 import { notFound } from "next/navigation"
 import { ChevronLeft, Mail, Phone, MapPin } from "lucide-react"
 import { getOrderDetail } from "@/lib/admin/queries"
-import { ORDER_STATE_LABELS, orderStateClass } from "@/lib/admin/labels"
+import { ORDER_STATE_LABELS, PAYMENT_STATE_LABELS, orderStateClass, paymentStateClass } from "@/lib/admin/labels"
 import { OrderManager } from "@/components/admin/order-manager"
 import { formatMoney } from "@/lib/money"
 import { cn } from "@/lib/utils"
@@ -42,9 +42,14 @@ export default async function OrderDetailPage({
           <h1 className="font-mono text-2xl text-foreground">{order.orderCode}</h1>
           <p className="mt-1 text-sm text-muted-foreground">Placed {formatDate(order.createdAt)}</p>
         </div>
-        <span className={cn("rounded-full px-3 py-1 text-sm", orderStateClass(order.orderState))}>
-          {ORDER_STATE_LABELS[order.orderState] ?? order.orderState}
-        </span>
+        <div className="flex flex-wrap items-center gap-2">
+          <span className={cn("rounded-full px-3 py-1 text-sm", orderStateClass(order.orderState))}>
+            Fulfilment: {ORDER_STATE_LABELS[order.orderState] ?? order.orderState}
+          </span>
+          <span className={cn("rounded-full px-3 py-1 text-sm", paymentStateClass(order.paymentState))}>
+            Payment: {PAYMENT_STATE_LABELS[order.paymentState] ?? order.paymentState}
+          </span>
+        </div>
       </header>
 
       <div className="grid gap-6 lg:grid-cols-[1fr_1.6fr]">

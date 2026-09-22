@@ -10,6 +10,7 @@ import { formatMoney } from "@/lib/money"
 import { ORDER_STATES, PAYMENT_STATES } from "@/lib/admin/labels"
 import { ORDER_STATE_LABELS, PAYMENT_STATE_LABELS, paymentStateClass } from "@/lib/admin/labels"
 import { cn } from "@/lib/utils"
+import { calculatePaymentMetrics } from "@/lib/admin/payment-metrics"
 import {
   updateOrderState,
   recordPayment,
@@ -54,10 +55,11 @@ export function OrderManager({ order, payments }: OrderManagerProps) {
   const [retNote, setRetNote] = useState("")
   const [retReceived, setRetReceived] = useState(false)
 
-  const paid = payments.filter((p) => p.kind !== "refund").reduce((s, p) => s + p.amountCents, 0)
-  const refunded = payments.filter((p) => p.kind === "refund").reduce((s, p) => s + p.amountCents, 0)
+  const paymentMetrics = calculatePaymentMetrics(payments)
   const target = order.agreedTotalCents ?? order.subtotalCents
-  const outstanding = Math.max(0, target - (paid - refunded))
+  const outstanding = Math.max(0, target - paymentMetrics.netCollectionsCents)
+  const fullyRefunded = paymentMetrics.grossCollectionsCents > 0 && paymentMetrics.netCollectionsCents <= 0
+  const isActiveFulfilment = order.orderState !== "cancelled"
 
   function run(fn: () => Promise<{ ok: boolean; error?: string }>, success: string) {
     startTransition(async () => {
@@ -71,10 +73,22 @@ export function OrderManager({ order, payments }: OrderManagerProps) {
     <div className="space-y-6">
       {/* Fulfilment status */}
       <section className="rounded-xl border border-border bg-card p-5">
-        <h2 className="font-medium text-foreground">Fulfilment</h2>
-        <p className="mt-1 text-sm text-muted-foreground">
-          Marking an order delivered deducts stock; reversing it restores stock.
-        </p>
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <h2 className="font-medium text-foreground">Fulfilment</h2>
+            <p className="mt-1 text-sm text-muted-foreground">
+              Payment and fulfilment are tracked separately. Marking an order delivered deducts stock; reversing it restores stock.
+            </p>
+          </div>
+          <span className={cn("rounded-full px-2.5 py-1 text-xs", paymentStateClass(order.paymentState))}>
+            Payment: {PAYMENT_STATE_LABELS[order.paymentState]}
+          </span>
+        </div>
+        {fullyRefunded && isActiveFulfilment && (
+          <div role="alert" className="mt-4 rounded-lg border border-destructive/40 bg-destructive/10 p-3 text-sm text-destructive">
+            This order is fully refunded but still {ORDER_STATE_LABELS[order.orderState]?.toLowerCase() ?? "active"}. It has not been cancelled automatically.
+          </div>
+        )}
         <div className="mt-4 flex flex-wrap gap-2">
           {ORDER_STATES.map((s) => (
             <button
@@ -104,14 +118,22 @@ export function OrderManager({ order, payments }: OrderManagerProps) {
           </span>
         </div>
 
-        <dl className="mt-4 grid grid-cols-3 gap-3 text-sm">
+        <dl className="mt-4 grid grid-cols-2 gap-3 text-sm sm:grid-cols-3">
           <div className="rounded-lg bg-secondary/50 p-3">
             <dt className="text-muted-foreground">Target total</dt>
             <dd className="mt-1 text-foreground">{formatMoney(target)}</dd>
           </div>
           <div className="rounded-lg bg-secondary/50 p-3">
-            <dt className="text-muted-foreground">Collected</dt>
-            <dd className="mt-1 text-foreground">{formatMoney(paid - refunded)}</dd>
+            <dt className="text-muted-foreground">Gross collected</dt>
+            <dd className="mt-1 text-foreground">{formatMoney(paymentMetrics.grossCollectionsCents)}</dd>
+          </div>
+          <div className="rounded-lg bg-secondary/50 p-3">
+            <dt className="text-muted-foreground">Refunds</dt>
+            <dd className="mt-1 text-destructive">−{formatMoney(paymentMetrics.refundsCents)}</dd>
+          </div>
+          <div className="rounded-lg bg-secondary/50 p-3">
+            <dt className="text-muted-foreground">Net collected</dt>
+            <dd className="mt-1 text-foreground">{formatMoney(paymentMetrics.netCollectionsCents)}</dd>
           </div>
           <div className="rounded-lg bg-secondary/50 p-3">
             <dt className="text-muted-foreground">Outstanding</dt>
