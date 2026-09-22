@@ -175,6 +175,7 @@ export const reviews = pgTable("reviews", {
   rating: integer("rating").notNull(),
   body: text("body").notNull().default(""),
   status: text("status").notNull().default("pending"),
+  featuredOnHome: boolean("featuredOnHome").notNull().default(false),
   createdAt: timestamp("createdAt").notNull().defaultNow(),
 })
 

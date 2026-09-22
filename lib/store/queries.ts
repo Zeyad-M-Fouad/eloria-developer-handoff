@@ -101,9 +101,9 @@ export async function getHomepageReviews() {
     })
     .from(reviews)
     .innerJoin(products, eq(reviews.productId, products.id))
-    .where(eq(reviews.status, "published"))
+    .where(and(eq(reviews.status, "published"), eq(reviews.featuredOnHome, true)))
     .orderBy(desc(reviews.createdAt))
-    .limit(3)
+    .limit(6)
 }
 
 export async function getProductBySlug(slug: string): Promise<StoreProduct | null> {

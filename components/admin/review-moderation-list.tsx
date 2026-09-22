@@ -4,7 +4,8 @@ import { useTransition } from "react"
 import { Check, X } from "lucide-react"
 import { toast } from "sonner"
 import { StarRating } from "@/components/store/star-rating"
-import { moderateReview } from "@/app/admin/actions"
+import { Switch } from "@/components/ui/switch"
+import { moderateReview, setReviewFeaturedOnHome } from "@/app/admin/actions"
 
 type Item = {
   review: {
@@ -14,6 +15,7 @@ type Item = {
     rating: number
     body: string
     status: string
+    featuredOnHome: boolean
     createdAt: Date | string
   }
   productName: string
@@ -30,6 +32,14 @@ export function ReviewModerationList({ items, moderatable }: { items: Item[]; mo
     startTransition(async () => {
       const res = await moderateReview(id, status)
       if (res.ok) toast.success(status === "published" ? "Review published." : "Review rejected.")
+      else toast.error("Failed.")
+    })
+  }
+
+  function toggleFeatured(id: number, featured: boolean) {
+    startTransition(async () => {
+      const res = await setReviewFeaturedOnHome(id, featured)
+      if (res.ok) toast.success(featured ? "Now showing on the homepage." : "Hidden from the homepage.")
       else toast.error("Failed.")
     })
   }
@@ -58,28 +68,41 @@ export function ReviewModerationList({ items, moderatable }: { items: Item[]; mo
               </p>
             </div>
 
-            {moderatable && (
-              <div className="flex gap-2">
-                <button
-                  type="button"
-                  disabled={pending}
-                  onClick={() => moderate(review.id, "published")}
-                  className="inline-flex items-center gap-1 rounded-full bg-primary px-3 py-1.5 text-sm text-primary-foreground hover:opacity-90 disabled:opacity-50"
-                >
-                  <Check width={15} height={15} />
-                  Publish
-                </button>
-                <button
-                  type="button"
-                  disabled={pending}
-                  onClick={() => moderate(review.id, "rejected")}
-                  className="inline-flex items-center gap-1 rounded-full border border-border px-3 py-1.5 text-sm text-foreground hover:border-destructive/50 hover:text-destructive disabled:opacity-50"
-                >
-                  <X width={15} height={15} />
-                  Reject
-                </button>
-              </div>
-            )}
+            <div className="flex flex-col items-end gap-3">
+              {moderatable && (
+                <div className="flex gap-2">
+                  <button
+                    type="button"
+                    disabled={pending}
+                    onClick={() => moderate(review.id, "published")}
+                    className="inline-flex items-center gap-1 rounded-full bg-primary px-3 py-1.5 text-sm text-primary-foreground hover:opacity-90 disabled:opacity-50"
+                  >
+                    <Check width={15} height={15} />
+                    Publish
+                  </button>
+                  <button
+                    type="button"
+                    disabled={pending}
+                    onClick={() => moderate(review.id, "rejected")}
+                    className="inline-flex items-center gap-1 rounded-full border border-border px-3 py-1.5 text-sm text-foreground hover:border-destructive/50 hover:text-destructive disabled:opacity-50"
+                  >
+                    <X width={15} height={15} />
+                    Reject
+                  </button>
+                </div>
+              )}
+
+              {review.status === "published" && (
+                <label className="flex items-center gap-2 text-xs text-muted-foreground">
+                  Show on homepage
+                  <Switch
+                    checked={review.featuredOnHome}
+                    disabled={pending}
+                    onCheckedChange={(checked) => toggleFeatured(review.id, checked)}
+                  />
+                </label>
+              )}
+            </div>
           </div>
         </li>
       ))}
