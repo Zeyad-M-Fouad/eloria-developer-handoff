@@ -476,6 +476,15 @@ export async function setReviewFeaturedOnHome(id: number, featured: boolean) {
   return { ok: true as const }
 }
 
+export async function deleteReview(id: number) {
+  await requireAdmin()
+  await db.delete(reviews).where(eq(reviews.id, id))
+  revalidatePath("/admin/reviews")
+  revalidatePath("/admin")
+  revalidatePath("/")
+  return { ok: true as const }
+}
+
 /* ----------------------------- Notifications ----------------------------- */
 
 export async function markNotificationRead(id: number) {
