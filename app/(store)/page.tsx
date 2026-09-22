@@ -5,12 +5,12 @@ import { Button } from "@/components/ui/button"
 import { ProductCard } from "@/components/store/product-card"
 import { FaqSection } from "@/components/store/faq-section"
 import { ContactForm } from "@/components/store/contact-form"
-import { getActiveProducts } from "@/lib/store/queries"
+import { getFeaturedProducts } from "@/lib/store/queries"
 
 export const dynamic = "force-dynamic"
 
 export default async function HomePage() {
-  const products = await getActiveProducts()
+  const products = await getFeaturedProducts()
   const featured = products.slice(0, 4)
 
   return (
