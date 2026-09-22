@@ -29,10 +29,11 @@ export default async function HomePage() {
               directly over WhatsApp — no rushed checkout, just care.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
-              <Button render={<Link href="/products" />} size="lg" className="rounded-full">
+              <Button nativeButton={false} render={<Link href="/products" />} size="lg" className="rounded-full">
                 Shop the collection
               </Button>
               <Button
+                nativeButton={false}
                 render={<Link href="/#faq" />}
                 size="lg"
                 variant="outline"
