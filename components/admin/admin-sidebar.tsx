@@ -12,6 +12,7 @@ import {
   Star,
   RotateCcw,
   BarChart3,
+  ClipboardList,
   LogOut,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
@@ -26,6 +27,7 @@ const LINKS = [
   { href: "/admin/reviews", label: "Reviews", icon: Star },
   { href: "/admin/returns", label: "Returns", icon: RotateCcw },
   { href: "/admin/reports", label: "Reports", icon: BarChart3 },
+  { href: "/admin/activity", label: "Activity log", icon: ClipboardList },
 ]
 
 export function AdminSidebar({ email }: { email: string }) {

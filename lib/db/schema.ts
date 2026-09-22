@@ -181,6 +181,17 @@ export const reviews = pgTable("reviews", {
 
 /* ---------------------------- Notifications ---------------------------- */
 
+export const auditLogs = pgTable("audit_logs", {
+  id: serial("id").primaryKey(),
+  userId: text("userId"),
+  userEmail: text("userEmail").notNull(),
+  action: text("action").notNull(),
+  entityType: text("entityType"),
+  entityId: text("entityId"),
+  details: jsonb("details").notNull().default({}),
+  createdAt: timestamp("createdAt").notNull().defaultNow(),
+})
+
 export const notifications = pgTable("notifications", {
   id: serial("id").primaryKey(),
   event: text("event").notNull(),
