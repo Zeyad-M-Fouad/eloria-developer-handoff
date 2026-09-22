@@ -1,11 +1,11 @@
 "use client"
 
 import { useTransition } from "react"
-import { Check, X } from "lucide-react"
+import { Check, Trash2, X } from "lucide-react"
 import { toast } from "sonner"
 import { StarRating } from "@/components/store/star-rating"
 import { Switch } from "@/components/ui/switch"
-import { moderateReview, setReviewFeaturedOnHome } from "@/app/admin/actions"
+import { deleteReview, moderateReview, setReviewFeaturedOnHome } from "@/app/admin/actions"
 
 type Item = {
   review: {
@@ -41,6 +41,15 @@ export function ReviewModerationList({ items, moderatable }: { items: Item[]; mo
       const res = await setReviewFeaturedOnHome(id, featured)
       if (res.ok) toast.success(featured ? "Now showing on the homepage." : "Hidden from the homepage.")
       else toast.error("Failed.")
+    })
+  }
+
+  function removeReview(id: number) {
+    if (!window.confirm("Delete this review permanently? This cannot be undone.")) return
+    startTransition(async () => {
+      const res = await deleteReview(id)
+      if (res.ok) toast.success("Review deleted.")
+      else toast.error("Could not delete review.")
     })
   }
 
@@ -102,6 +111,17 @@ export function ReviewModerationList({ items, moderatable }: { items: Item[]; mo
                   />
                 </label>
               )}
+
+              <button
+                type="button"
+                disabled={pending}
+                onClick={() => removeReview(review.id)}
+                aria-label={`Delete review by ${review.authorName}`}
+                className="inline-flex items-center gap-1 rounded-full border border-destructive/40 px-3 py-1.5 text-sm text-destructive hover:bg-destructive/10 disabled:opacity-50"
+              >
+                <Trash2 width={15} height={15} />
+                Delete
+              </button>
             </div>
           </div>
         </li>
