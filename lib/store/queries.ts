@@ -89,6 +89,23 @@ export async function getFeaturedProducts(): Promise<StoreProduct[]> {
   return assembleProducts(rows)
 }
 
+export async function getHomepageReviews() {
+  return db
+    .select({
+      id: reviews.id,
+      authorName: reviews.authorName,
+      rating: reviews.rating,
+      body: reviews.body,
+      createdAt: reviews.createdAt,
+      productName: products.name,
+    })
+    .from(reviews)
+    .innerJoin(products, eq(reviews.productId, products.id))
+    .where(and(eq(reviews.status, "published"), eq(reviews.featuredOnHome, true)))
+    .orderBy(desc(reviews.createdAt))
+    .limit(6)
+}
+
 export async function getProductBySlug(slug: string): Promise<StoreProduct | null> {
   const [p] = await db
     .select()

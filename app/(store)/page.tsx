@@ -5,12 +5,13 @@ import { Button } from "@/components/ui/button"
 import { ProductCard } from "@/components/store/product-card"
 import { FaqSection } from "@/components/store/faq-section"
 import { ContactForm } from "@/components/store/contact-form"
-import { getFeaturedProducts } from "@/lib/store/queries"
+import { StarRating } from "@/components/store/star-rating"
+import { getFeaturedProducts, getHomepageReviews } from "@/lib/store/queries"
 
 export const dynamic = "force-dynamic"
 
 export default async function HomePage() {
-  const products = await getFeaturedProducts()
+  const [products, homepageReviews] = await Promise.all([getFeaturedProducts(), getHomepageReviews()])
   const featured = products.slice(0, 4)
 
   return (
@@ -95,6 +96,40 @@ export default async function HomePage() {
         ) : (
           <p className="mt-10 text-muted-foreground">Products are coming soon.</p>
         )}
+      </section>
+
+      {/* Customer reviews */}
+      <section className="border-y border-border/70 bg-secondary/20 px-4 py-16 md:px-6 md:py-20">
+        <div className="mx-auto max-w-6xl">
+          <div className="mx-auto max-w-2xl text-center">
+            <p className="text-sm uppercase tracking-[0.2em] text-muted-foreground">Kind words</p>
+            <h2 className="mt-3 font-serif text-3xl text-foreground">Loved by thoughtful skin</h2>
+            <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+              A few notes from the Eloria community.
+            </p>
+          </div>
+
+          {homepageReviews.length > 0 ? (
+            <div className="mt-10 grid gap-5 md:grid-cols-3">
+              {homepageReviews.map((review) => (
+                <article key={review.id} className="rounded-2xl border border-border/70 bg-background p-6">
+                  <StarRating value={review.rating} />
+                  <blockquote className="mt-4 text-pretty leading-relaxed text-foreground">
+                    &ldquo;{review.body}&rdquo;
+                  </blockquote>
+                  <div className="mt-6 flex items-center justify-between gap-3 text-xs text-muted-foreground">
+                    <span>{review.authorName}</span>
+                    <span>{review.productName}</span>
+                  </div>
+                </article>
+              ))}
+            </div>
+          ) : (
+            <p className="mx-auto mt-10 max-w-md text-center text-sm text-muted-foreground">
+              Be the first to share your Eloria experience.
+            </p>
+          )}
+        </div>
       </section>
 
       <FaqSection />

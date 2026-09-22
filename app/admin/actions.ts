@@ -458,9 +458,21 @@ export async function deleteCombination(id: number, productId: number) {
 
 export async function moderateReview(id: number, status: "published" | "rejected") {
   await requireAdmin()
-  await db.update(reviews).set({ status }).where(eq(reviews.id, id))
+  await db
+    .update(reviews)
+    .set({ status, ...(status === "rejected" ? { featuredOnHome: false } : {}) })
+    .where(eq(reviews.id, id))
   revalidatePath("/admin/reviews")
   revalidatePath("/admin")
+  revalidatePath("/")
+  return { ok: true as const }
+}
+
+export async function setReviewFeaturedOnHome(id: number, featured: boolean) {
+  await requireAdmin()
+  await db.update(reviews).set({ featuredOnHome: featured }).where(eq(reviews.id, id))
+  revalidatePath("/admin/reviews")
+  revalidatePath("/")
   return { ok: true as const }
 }
 
