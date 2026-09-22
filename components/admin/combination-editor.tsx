@@ -119,16 +119,29 @@ export function CombinationEditor({
 
   const fields = (
     <>
-      <div className="grid gap-2 sm:grid-cols-3">
-        <Input placeholder="Size" value={draft.size} onChange={(e) => setDraft({ ...draft, size: e.target.value })} />
-        <Input placeholder="Colour" value={draft.color} onChange={(e) => setDraft({ ...draft, color: e.target.value })} />
-        <Input placeholder="Scent" value={draft.scent} onChange={(e) => setDraft({ ...draft, scent: e.target.value })} />
+      <div className="grid gap-3 sm:grid-cols-3">
+        {(["size", "color", "scent"] as const).map((field) => {
+          const labels = { size: "Size", color: "Colour", scent: "Scent" }
+          return (
+            <div key={field} className="flex min-w-0 flex-col gap-1.5">
+              <label htmlFor={`variant-${field}`} className="text-xs font-medium text-foreground">{labels[field]}</label>
+              <Input id={`variant-${field}`} value={draft[field]} onChange={(e) => setDraft({ ...draft, [field]: e.target.value })} />
+            </div>
+          )
+        })}
       </div>
-      <div className="mt-2 grid gap-2 sm:grid-cols-4">
-        <Input placeholder="Price £" inputMode="decimal" value={draft.price} onChange={(e) => setDraft({ ...draft, price: e.target.value })} />
-        <Input placeholder="Sale £" inputMode="decimal" value={draft.salePrice} onChange={(e) => setDraft({ ...draft, salePrice: e.target.value })} />
-        <Input placeholder="Qty" inputMode="numeric" value={draft.qty} onChange={(e) => setDraft({ ...draft, qty: e.target.value })} />
-        <Input placeholder="Low at" inputMode="numeric" value={draft.threshold} onChange={(e) => setDraft({ ...draft, threshold: e.target.value })} />
+      <div className="mt-3 grid gap-3 sm:grid-cols-4">
+        {([
+          ["price", "Price (£)", "decimal"],
+          ["salePrice", "Sale price (£)", "decimal"],
+          ["qty", "Stock quantity", "numeric"],
+          ["threshold", "Low-stock threshold", "numeric"],
+        ] as const).map(([field, label, inputMode]) => (
+          <div key={field} className="flex min-w-0 flex-col gap-1.5">
+            <label htmlFor={`variant-${field}`} className="text-xs font-medium text-foreground">{label}</label>
+            <Input id={`variant-${field}`} inputMode={inputMode} value={draft[field]} onChange={(e) => setDraft({ ...draft, [field]: e.target.value })} />
+          </div>
+        ))}
       </div>
     </>
   )

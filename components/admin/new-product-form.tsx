@@ -189,17 +189,33 @@ export function NewProductForm({ categories }: { categories: { id: number; name:
         <div className="mt-4 space-y-3">
           {rows.map((r) => (
             <div key={r.key} className="rounded-lg border border-border/70 p-3">
-              <div className="grid gap-2 sm:grid-cols-3">
-                <Input placeholder="Size" value={r.size} onChange={(e) => updateRow(r.key, { size: e.target.value })} />
-                <Input placeholder="Colour" value={r.color} onChange={(e) => updateRow(r.key, { color: e.target.value })} />
-                <Input placeholder="Scent" value={r.scent} onChange={(e) => updateRow(r.key, { scent: e.target.value })} />
+              <div className="grid gap-3 sm:grid-cols-3">
+                {(["size", "color", "scent"] as const).map((field) => {
+                  const labels = { size: "Size", color: "Colour", scent: "Scent" }
+                  return (
+                    <div key={field} className="flex min-w-0 flex-col gap-1.5">
+                      <label htmlFor={`${r.key}-${field}`} className="text-xs font-medium text-foreground">{labels[field]}</label>
+                      <Input id={`${r.key}-${field}`} value={r[field]} onChange={(e) => updateRow(r.key, { [field]: e.target.value })} />
+                    </div>
+                  )
+                })}
               </div>
-              <div className="mt-2 grid gap-2 sm:grid-cols-4">
-                <Input placeholder="Price £" inputMode="decimal" value={r.price} onChange={(e) => updateRow(r.key, { price: e.target.value })} />
-                <Input placeholder="Sale £" inputMode="decimal" value={r.salePrice} onChange={(e) => updateRow(r.key, { salePrice: e.target.value })} />
-                <Input placeholder="Qty" inputMode="numeric" value={r.qty} onChange={(e) => updateRow(r.key, { qty: e.target.value })} />
+              <div className="mt-3 grid gap-3 sm:grid-cols-4">
+                {([
+                  ["price", "Price (£)", "decimal"],
+                  ["salePrice", "Sale price (£)", "decimal"],
+                  ["qty", "Stock quantity", "numeric"],
+                ] as const).map(([field, label, inputMode]) => (
+                  <div key={field} className="flex min-w-0 flex-col gap-1.5">
+                    <label htmlFor={`${r.key}-${field}`} className="text-xs font-medium text-foreground">{label}</label>
+                    <Input id={`${r.key}-${field}`} inputMode={inputMode} value={r[field]} onChange={(e) => updateRow(r.key, { [field]: e.target.value })} />
+                  </div>
+                ))}
                 <div className="flex gap-2">
-                  <Input placeholder="Low at" inputMode="numeric" value={r.threshold} onChange={(e) => updateRow(r.key, { threshold: e.target.value })} />
+                  <div className="flex min-w-0 flex-1 flex-col gap-1.5">
+                    <label htmlFor={`${r.key}-threshold`} className="text-xs font-medium text-foreground">Low-stock threshold</label>
+                    <Input id={`${r.key}-threshold`} inputMode="numeric" value={r.threshold} onChange={(e) => updateRow(r.key, { threshold: e.target.value })} />
+                  </div>
                   {rows.length > 1 && (
                     <button
                       type="button"

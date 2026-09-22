@@ -13,8 +13,10 @@ export default async function ReportsPage() {
   const summary = [
     { label: "Delivered revenue", value: formatMoney(report.deliveredRevenueCents) },
     { label: "Units delivered", value: String(report.deliveredUnits) },
-    { label: "Payments collected", value: formatMoney(stats.collectedCents) },
-    { label: "Deposits held", value: formatMoney(stats.depositsHeldCents) },
+    { label: "Gross collections (all orders)", value: formatMoney(stats.grossCollectionsCents) },
+    { label: "Refunds (all orders)", value: formatMoney(stats.refundsCents) },
+    { label: "Net collections (all orders)", value: formatMoney(stats.netCollectionsCents) },
+    { label: "Deposits held (undelivered)", value: formatMoney(stats.depositsHeldCents) },
   ]
 
   return (
@@ -22,7 +24,7 @@ export default async function ReportsPage() {
       <header className="mb-6 flex flex-wrap items-center justify-between gap-3">
         <div>
           <h1 className="font-serif text-3xl text-foreground">Reports</h1>
-          <p className="mt-1 text-sm text-muted-foreground">Based on delivered orders.</p>
+          <p className="mt-1 text-sm text-muted-foreground">Delivered revenue and units use delivered orders; collection metrics include all orders.</p>
         </div>
         <Link
           href="/admin/export/orders"
@@ -34,7 +36,7 @@ export default async function ReportsPage() {
         </Link>
       </header>
 
-      <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+      <div className="grid grid-cols-2 gap-4 lg:grid-cols-5">
         {summary.map((s) => (
           <div key={s.label} className="rounded-xl border border-border bg-card p-5">
             <p className="text-sm text-muted-foreground">{s.label}</p>

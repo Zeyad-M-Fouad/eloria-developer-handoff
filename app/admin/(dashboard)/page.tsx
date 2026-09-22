@@ -17,7 +17,9 @@ export default async function AdminOverviewPage() {
   const cards = [
     { label: "Pending orders", value: String(stats.pendingOrders), href: "/admin/orders?state=pending" },
     { label: "Delivered revenue", value: formatMoney(stats.deliveredRevenueCents), href: "/admin/reports" },
-    { label: "Payments collected", value: formatMoney(stats.collectedCents), href: "/admin/orders" },
+    { label: "Gross collections (all orders)", value: formatMoney(stats.grossCollectionsCents), href: "/admin/orders" },
+    { label: "Refunds (all orders)", value: formatMoney(stats.refundsCents), href: "/admin/orders" },
+    { label: "Net collections (all orders)", value: formatMoney(stats.netCollectionsCents), href: "/admin/orders" },
     { label: "Low stock variants", value: String(stats.lowStockCount), href: "/admin/inventory" },
   ]
 
@@ -30,7 +32,7 @@ export default async function AdminOverviewPage() {
         </p>
       </header>
 
-      <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+      <div className="grid grid-cols-2 gap-4 lg:grid-cols-5">
         {cards.map((c) => (
           <Link
             key={c.label}
