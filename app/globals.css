@@ -90,6 +90,37 @@
   --sidebar-ring: oklch(0.48 0.045 152);
 }
 
+.dark {
+  color-scheme: dark;
+  --background: oklch(0.18 0.018 155);
+  --foreground: oklch(0.94 0.012 95);
+  --card: oklch(0.22 0.02 155);
+  --card-foreground: oklch(0.94 0.012 95);
+  --popover: oklch(0.22 0.02 155);
+  --popover-foreground: oklch(0.94 0.012 95);
+  --primary: oklch(0.68 0.08 152);
+  --primary-foreground: oklch(0.18 0.018 155);
+  --secondary: oklch(0.27 0.025 150);
+  --secondary-foreground: oklch(0.9 0.015 95);
+  --muted: oklch(0.25 0.022 150);
+  --muted-foreground: oklch(0.72 0.018 145);
+  --accent: oklch(0.72 0.1 52);
+  --accent-foreground: oklch(0.18 0.018 155);
+  --destructive: oklch(0.65 0.16 27);
+  --destructive-foreground: oklch(0.98 0.01 95);
+  --border: oklch(0.33 0.028 150);
+  --input: oklch(0.33 0.028 150);
+  --ring: oklch(0.68 0.08 152);
+  --sidebar: oklch(0.2 0.022 155);
+  --sidebar-foreground: oklch(0.94 0.012 95);
+  --sidebar-primary: oklch(0.68 0.08 152);
+  --sidebar-primary-foreground: oklch(0.18 0.018 155);
+  --sidebar-accent: oklch(0.28 0.028 150);
+  --sidebar-accent-foreground: oklch(0.94 0.012 95);
+  --sidebar-border: oklch(0.33 0.028 150);
+  --sidebar-ring: oklch(0.68 0.08 152);
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
@@ -101,6 +132,33 @@
   h1, h2, h3, h4 {
     @apply font-serif;
   }
+}
+
+@keyframes site-rise {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes site-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+main > * {
+  animation: site-rise 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+main > *:nth-child(2) { animation-delay: 70ms; }
+main > *:nth-child(3) { animation-delay: 140ms; }
+main > *:nth-child(4) { animation-delay: 210ms; }
+
+main a, main button, main article, main [data-slot='card'] {
+  transition: transform 0.25s ease, box-shadow 0.25s ease, background-color 0.25s ease, border-color 0.25s ease, color 0.25s ease;
+}
+
+main article:hover, main [data-slot='card']:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 30px -18px color-mix(in oklch, var(--foreground) 35%, transparent);
 }
 
 @keyframes admin-rise {
@@ -199,6 +257,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  main *,
   .admin-page *,
   .admin-sidebar * {
     animation: none !important;

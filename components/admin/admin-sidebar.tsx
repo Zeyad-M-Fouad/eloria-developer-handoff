@@ -17,6 +17,7 @@ import {
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { authClient } from "@/lib/auth-client"
+import { ThemeToggle } from "@/components/theme-toggle"
 
 const LINKS = [
   { href: "/admin", label: "Overview", icon: LayoutDashboard, exact: true },
@@ -72,6 +73,7 @@ export function AdminSidebar({ email }: { email: string }) {
 
       <div className="hidden border-t border-sidebar-border p-3 md:block">
         <p className="truncate px-3 py-1 text-xs text-sidebar-foreground/60">{email}</p>
+        <ThemeToggle />
         <button
           type="button"
           onClick={signOut}
