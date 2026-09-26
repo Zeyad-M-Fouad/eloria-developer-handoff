@@ -10,6 +10,7 @@ import { ThemeToggle } from "@/components/theme-toggle"
 
 const NAV = [
   { href: "/products", label: "Shop" },
+  { href: "/assistant", label: "Codex assistant" },
   { href: "/#faq", label: "FAQ" },
   { href: "/shipping", label: "Shipping" },
   { href: "/contact", label: "Contact" },
