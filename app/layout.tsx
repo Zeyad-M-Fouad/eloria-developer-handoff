@@ -1,6 +1,6 @@
 import { Analytics } from '@vercel/analytics/next'
 import type { Metadata, Viewport } from 'next'
-import { Inter, Fraunces } from 'next/font/google'
+import { Inter, Fraunces, Noto_Sans_Arabic, Noto_Naskh_Arabic } from 'next/font/google'
 import { CartProvider } from '@/components/cart/cart-provider'
 import { LanguageProvider } from '@/components/language-provider'
 import { ThemeProvider } from '@/components/theme-provider'
@@ -16,6 +16,18 @@ const inter = Inter({
 const fraunces = Fraunces({
   subsets: ['latin'],
   variable: '--font-fraunces',
+  display: 'swap',
+})
+
+const notoArabic = Noto_Sans_Arabic({
+  subsets: ['arabic'],
+  variable: '--font-noto-arabic',
+  display: 'swap',
+})
+
+const notoNaskh = Noto_Naskh_Arabic({
+  subsets: ['arabic'],
+  variable: '--font-noto-naskh',
   display: 'swap',
 })
 
@@ -48,7 +60,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className={`${inter.variable} ${fraunces.variable} bg-background`}>
+    <html lang="en" className={`${inter.variable} ${fraunces.variable} ${notoArabic.variable} ${notoNaskh.variable} bg-background`}>
       <body className="font-sans antialiased">
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
           <LanguageProvider><CartProvider>{children}</CartProvider></LanguageProvider>
