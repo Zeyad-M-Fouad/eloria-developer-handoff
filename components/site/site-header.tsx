@@ -6,6 +6,7 @@ import { useState } from "react"
 import { ShoppingBag, Menu, X } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useCart } from "@/components/cart/cart-provider"
+import { ThemeToggle } from "@/components/theme-toggle"
 
 const NAV = [
   { href: "/products", label: "Shop" },
@@ -43,6 +44,7 @@ export function SiteHeader() {
         </div>
 
         <div className="flex items-center gap-2">
+          <ThemeToggle compact />
           <Link
             href="/cart"
             className="relative inline-flex h-10 w-10 items-center justify-center rounded-full text-foreground transition-colors hover:bg-muted"
