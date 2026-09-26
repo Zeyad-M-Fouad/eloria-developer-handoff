@@ -7,8 +7,6 @@ import { ShoppingBag, Menu, X } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useCart } from "@/components/cart/cart-provider"
 import { ThemeToggle } from "@/components/theme-toggle"
-import { LanguageToggle } from "@/components/language-toggle"
-import { useLanguage } from "@/components/language-provider"
 
 const NAV = [
   { href: "/products", label: "Shop" },
@@ -21,8 +19,6 @@ export function SiteHeader() {
   const pathname = usePathname()
   const { count, hydrated } = useCart()
   const [open, setOpen] = useState(false)
-  const { t } = useLanguage()
-  const localizedNav = NAV.map((item) => ({ ...item, label: t(`nav.${item.href === "/products" ? "shop" : item.href === "/#faq" ? "faq" : item.href.slice(1)}`) }))
 
   return (
     <header className="sticky top-0 z-40 border-b border-border/70 bg-background/85 backdrop-blur-md">
@@ -32,7 +28,7 @@ export function SiteHeader() {
             Eloria
           </Link>
           <nav className="hidden items-center gap-6 md:flex">
-            {localizedNav.map((item) => (
+            {NAV.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
@@ -48,7 +44,6 @@ export function SiteHeader() {
         </div>
 
         <div className="flex items-center gap-2">
-          <LanguageToggle />
           <ThemeToggle compact />
           <Link
             href="/cart"
@@ -76,7 +71,7 @@ export function SiteHeader() {
 
       {open && (
         <nav className="border-t border-border/70 bg-background px-4 py-2 md:hidden">
-          {localizedNav.map((item) => (
+          {NAV.map((item) => (
             <Link
               key={item.href}
               href={item.href}
