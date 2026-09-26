@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { getReturns } from "@/lib/admin/queries"
+import { getReturns } from "@/backend/admin"
 import { cn } from "@/lib/utils"
 
 export const metadata = { title: "Cancellations & returns" }

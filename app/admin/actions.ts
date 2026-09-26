@@ -1,6 +1,6 @@
 "use server"
 
-import { db } from "@/lib/db"
+import { db } from "@/backend/db"
 import {
   products,
   productCombinations,
@@ -12,14 +12,14 @@ import {
   reviews,
   notifications,
   cancellationsReturns,
-} from "@/lib/db/schema"
+} from "@/backend/db"
 import { and, eq, sql } from "drizzle-orm"
 import { revalidatePath } from "next/cache"
-import { requireAdmin } from "@/lib/admin/guard"
-import { createNotification } from "@/lib/notifications"
-import { generateRefCode } from "@/lib/store/order-code"
-import { ORDER_STATES, PAYMENT_STATES, type OrderState } from "@/lib/admin/queries"
-import { logAdminAction } from "@/lib/admin/audit"
+import { requireAdmin } from "@/backend/admin"
+import { createNotification } from "@/backend/notifications"
+import { generateRefCode } from "@/backend/store"
+import { ORDER_STATES, PAYMENT_STATES, type OrderState } from "@/backend/admin"
+import { logAdminAction } from "@/backend/admin"
 
 function slugify(input: string): string {
   return input

@@ -1,6 +1,6 @@
 'use server'
 
-import { sendBusinessEmail } from '@/lib/notifications'
+import { sendBusinessEmail } from '@/backend/notifications'
 
 export type ContactFormState = {
   status: 'idle' | 'success' | 'error'

@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 import { Catalog } from "@/components/store/catalog"
-import { getActiveProducts, getCategories } from "@/lib/store/queries"
+import { getActiveProducts, getCategories } from "@/backend/store"
 
 export const dynamic = "force-dynamic"
 

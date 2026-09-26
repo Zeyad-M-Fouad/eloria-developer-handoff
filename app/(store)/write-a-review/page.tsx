@@ -2,7 +2,7 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import Image from "next/image"
 import { ChevronRight } from "lucide-react"
-import { getActiveProducts } from "@/lib/store/queries"
+import { getActiveProducts } from "@/backend/store"
 
 export const metadata: Metadata = {
   title: "Write a review",

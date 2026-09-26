@@ -1,6 +1,6 @@
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
-import { getOverviewStats, getRecentNotifications, getLowStockCombinations } from "@/lib/admin/queries"
+import { getOverviewStats, getRecentNotifications, getLowStockCombinations } from "@/backend/admin"
 import { NotificationFeed } from "@/components/admin/notification-feed"
 import { formatMoney } from "@/lib/money"
 

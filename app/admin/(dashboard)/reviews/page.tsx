@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { getReviewsByStatus } from "@/lib/admin/queries"
+import { getReviewsByStatus } from "@/backend/admin"
 import { ReviewModerationList } from "@/components/admin/review-moderation-list"
 import { cn } from "@/lib/utils"
 

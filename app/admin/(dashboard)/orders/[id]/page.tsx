@@ -1,7 +1,7 @@
 import Link from "next/link"
 import { notFound } from "next/navigation"
 import { ChevronLeft, Mail, Phone, MapPin } from "lucide-react"
-import { getOrderDetail } from "@/lib/admin/queries"
+import { getOrderDetail } from "@/backend/admin"
 import { ORDER_STATE_LABELS, PAYMENT_STATE_LABELS, orderStateClass, paymentStateClass } from "@/lib/admin/labels"
 import { OrderManager } from "@/components/admin/order-manager"
 import { formatMoney } from "@/lib/money"

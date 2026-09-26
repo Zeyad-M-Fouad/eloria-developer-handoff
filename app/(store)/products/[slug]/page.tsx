@@ -4,7 +4,7 @@ import Link from "next/link"
 import { ChevronLeft } from "lucide-react"
 import { ProductDetail } from "@/components/store/product-detail"
 import { ReviewsSection } from "@/components/store/reviews-section"
-import { getProductBySlug, getPublishedReviews } from "@/lib/store/queries"
+import { getProductBySlug, getPublishedReviews } from "@/backend/store"
 
 export const dynamic = "force-dynamic"
 

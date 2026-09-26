@@ -1,7 +1,7 @@
 import Link from "next/link"
 import { notFound } from "next/navigation"
 import { ChevronLeft, ExternalLink } from "lucide-react"
-import { getAdminProduct, getCategoriesList } from "@/lib/admin/queries"
+import { getAdminProduct, getCategoriesList } from "@/backend/admin"
 import { EditProductForm } from "@/components/admin/edit-product-form"
 import { CombinationEditor } from "@/components/admin/combination-editor"
 
