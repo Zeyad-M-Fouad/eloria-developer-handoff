@@ -41,7 +41,7 @@ export function AdminSidebar({ email }: { email: string }) {
   }
 
   return (
-    <aside className="flex w-full shrink-0 flex-col border-b border-sidebar-border bg-sidebar md:h-svh md:w-64 md:border-b-0 md:border-r">
+    <aside className="admin-sidebar flex w-full shrink-0 flex-col border-b border-sidebar-border bg-sidebar md:sticky md:top-0 md:h-svh md:w-64 md:self-start md:border-b-0 md:border-r">
       <div className="flex items-center justify-between px-5 py-5">
         <Link href="/admin" className="font-serif text-xl font-semibold text-sidebar-foreground">
           Eloria
@@ -49,7 +49,7 @@ export function AdminSidebar({ email }: { email: string }) {
         <span className="rounded-full bg-sidebar-primary/10 px-2 py-0.5 text-xs text-sidebar-primary">Admin</span>
       </div>
 
-      <nav className="flex flex-1 flex-row gap-1 overflow-x-auto px-3 pb-3 md:flex-col md:overflow-visible md:pb-0">
+      <nav className="flex flex-1 flex-row gap-1 overflow-x-auto px-3 pb-3 md:flex-col md:overflow-y-auto md:pb-0">
         {LINKS.map((link) => {
           const active = link.exact ? pathname === link.href : pathname.startsWith(link.href)
           return (
@@ -57,7 +57,7 @@ export function AdminSidebar({ email }: { email: string }) {
               key={link.href}
               href={link.href}
               className={cn(
-                "flex shrink-0 items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors",
+                "admin-nav-link flex shrink-0 items-center gap-3 rounded-md px-3 py-2 text-sm transition-all duration-200 active:scale-[0.98]",
                 active
                   ? "bg-sidebar-primary text-sidebar-primary-foreground"
                   : "text-sidebar-foreground/80 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",

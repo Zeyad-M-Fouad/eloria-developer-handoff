@@ -102,3 +102,106 @@
     @apply font-serif;
   }
 }
+
+@keyframes admin-rise {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes admin-slide-in {
+  from {
+    opacity: 0;
+    transform: translateX(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* `backwards` fill avoids leaving a transform behind, which would break sticky/fixed descendants. */
+.admin-page > *,
+.admin-page > * > *,
+.admin-page section,
+.admin-page [data-slot='card'],
+.admin-page tbody tr {
+  animation: admin-rise 0.45s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+}
+
+.admin-page > * > :nth-child(2),
+.admin-page section:nth-child(2),
+.admin-page tbody tr:nth-child(2) { animation-delay: 60ms; }
+.admin-page > * > :nth-child(3),
+.admin-page section:nth-child(3),
+.admin-page tbody tr:nth-child(3) { animation-delay: 120ms; }
+.admin-page > * > :nth-child(4),
+.admin-page section:nth-child(4),
+.admin-page tbody tr:nth-child(4) { animation-delay: 180ms; }
+.admin-page > * > :nth-child(5),
+.admin-page section:nth-child(5),
+.admin-page tbody tr:nth-child(5) { animation-delay: 240ms; }
+.admin-page > * > :nth-child(n + 6),
+.admin-page section:nth-child(n + 6),
+.admin-page tbody tr:nth-child(n + 6) { animation-delay: 300ms; }
+
+.admin-page section,
+.admin-page [data-slot='card'] {
+  transition:
+    box-shadow 0.25s ease,
+    border-color 0.25s ease,
+    transform 0.25s ease;
+}
+
+.admin-page section:hover,
+.admin-page [data-slot='card']:hover {
+  box-shadow: 0 8px 24px -12px color-mix(in oklch, var(--foreground) 22%, transparent);
+  border-color: color-mix(in oklch, var(--primary) 30%, var(--border));
+}
+
+.admin-page tbody tr {
+  transition: background-color 0.2s ease;
+}
+
+.admin-page button,
+.admin-page a,
+.admin-page input,
+.admin-page select,
+.admin-page textarea {
+  transition-property: color, background-color, border-color, box-shadow, transform, opacity;
+  transition-duration: 0.2s;
+}
+
+.admin-page button:not(:disabled):active {
+  transform: scale(0.97);
+}
+
+.admin-sidebar .admin-nav-link {
+  animation: admin-slide-in 0.4s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+}
+
+.admin-sidebar .admin-nav-link:nth-child(2) { animation-delay: 30ms; }
+.admin-sidebar .admin-nav-link:nth-child(3) { animation-delay: 60ms; }
+.admin-sidebar .admin-nav-link:nth-child(4) { animation-delay: 90ms; }
+.admin-sidebar .admin-nav-link:nth-child(5) { animation-delay: 120ms; }
+.admin-sidebar .admin-nav-link:nth-child(6) { animation-delay: 150ms; }
+.admin-sidebar .admin-nav-link:nth-child(7) { animation-delay: 180ms; }
+.admin-sidebar .admin-nav-link:nth-child(8) { animation-delay: 210ms; }
+.admin-sidebar .admin-nav-link:nth-child(9) { animation-delay: 240ms; }
+
+.admin-sidebar .admin-nav-link:not([class*='bg-sidebar-primary']):hover {
+  transform: translateX(3px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .admin-page *,
+  .admin-sidebar * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
