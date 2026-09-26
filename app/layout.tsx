@@ -2,6 +2,7 @@ import { Analytics } from '@vercel/analytics/next'
 import type { Metadata, Viewport } from 'next'
 import { Inter, Fraunces } from 'next/font/google'
 import { CartProvider } from '@/components/cart/cart-provider'
+import { LanguageProvider } from '@/components/language-provider'
 import { ThemeProvider } from '@/components/theme-provider'
 import { Toaster } from '@/components/ui/sonner'
 import './globals.css'
@@ -50,7 +51,7 @@ export default function RootLayout({
     <html lang="en" className={`${inter.variable} ${fraunces.variable} bg-background`}>
       <body className="font-sans antialiased">
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-          <CartProvider>{children}</CartProvider>
+          <LanguageProvider><CartProvider>{children}</CartProvider></LanguageProvider>
         </ThemeProvider>
         <Toaster />
         {process.env.NODE_ENV === 'production' && <Analytics />}
