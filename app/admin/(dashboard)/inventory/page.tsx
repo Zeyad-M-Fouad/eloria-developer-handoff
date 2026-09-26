@@ -1,4 +1,4 @@
-import { getAllCombinationsWithProduct } from "@/lib/admin/queries"
+import { getAllCombinationsWithProduct } from "@/backend/admin"
 import { InventoryRow } from "@/components/admin/inventory-row"
 
 export const metadata = { title: "Inventory" }

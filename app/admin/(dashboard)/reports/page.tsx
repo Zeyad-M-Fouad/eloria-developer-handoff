@@ -1,6 +1,6 @@
 import Link from "next/link"
 import { Download } from "lucide-react"
-import { getSalesReport, getOverviewStats } from "@/lib/admin/queries"
+import { getSalesReport, getOverviewStats } from "@/backend/admin"
 import { formatMoney } from "@/lib/money"
 
 export const metadata = { title: "Reports" }

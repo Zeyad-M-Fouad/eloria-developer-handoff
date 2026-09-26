@@ -1,5 +1,5 @@
 import { CategoryManager } from "@/components/admin/category-manager"
-import { getCategoriesList } from "@/lib/admin/queries"
+import { getCategoriesList } from "@/backend/admin"
 
 export const metadata = { title: "Categories" }
 export const dynamic = "force-dynamic"

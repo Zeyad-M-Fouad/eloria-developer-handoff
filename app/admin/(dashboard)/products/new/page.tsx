@@ -1,6 +1,6 @@
 import Link from "next/link"
 import { ChevronLeft } from "lucide-react"
-import { getCategoriesList } from "@/lib/admin/queries"
+import { getCategoriesList } from "@/backend/admin"
 import { NewProductForm } from "@/components/admin/new-product-form"
 
 export const metadata = { title: "New product" }

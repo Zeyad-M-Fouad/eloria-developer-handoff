@@ -1,4 +1,4 @@
-import { getAuditLogs } from "@/lib/admin/audit"
+import { getAuditLogs } from "@/backend/admin"
 
 export const dynamic = "force-dynamic"
 export const metadata = { title: "Activity log" }

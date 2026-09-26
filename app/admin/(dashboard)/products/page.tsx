@@ -1,7 +1,7 @@
 import Link from "next/link"
 import Image from "next/image"
 import { Plus } from "lucide-react"
-import { getAdminProducts } from "@/lib/admin/queries"
+import { getAdminProducts } from "@/backend/admin"
 import { formatMoney, isOnSale } from "@/lib/money"
 import { cn } from "@/lib/utils"
 

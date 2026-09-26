@@ -6,7 +6,7 @@ import { ProductCard } from "@/components/store/product-card"
 import { FaqSection } from "@/components/store/faq-section"
 import { ContactForm } from "@/components/store/contact-form"
 import { StarRating } from "@/components/store/star-rating"
-import { getFeaturedProducts, getHomepageReviews } from "@/lib/store/queries"
+import { getFeaturedProducts, getHomepageReviews } from "@/backend/store"
 
 export const dynamic = "force-dynamic"
 

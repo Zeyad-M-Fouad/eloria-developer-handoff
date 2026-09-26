@@ -1,6 +1,6 @@
 import Link from "next/link"
 import { Download } from "lucide-react"
-import { getOrders, ORDER_STATES, type OrderState } from "@/lib/admin/queries"
+import { getOrders, ORDER_STATES, type OrderState } from "@/backend/admin"
 import { ORDER_STATE_LABELS, PAYMENT_STATE_LABELS, orderStateClass, paymentStateClass } from "@/lib/admin/labels"
 import { formatMoney } from "@/lib/money"
 import { cn } from "@/lib/utils"

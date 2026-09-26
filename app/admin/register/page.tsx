@@ -1,8 +1,8 @@
 import Link from "next/link"
 import { redirect } from "next/navigation"
 import { headers } from "next/headers"
-import { auth } from "@/lib/auth"
-import { adminExists } from "@/lib/admin/guard"
+import { auth } from "@/backend/auth"
+import { adminExists } from "@/backend/admin"
 import { Card } from "@/components/ui/card"
 import { AdminAuthForm } from "@/components/admin/admin-auth-form"
 

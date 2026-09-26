@@ -1,9 +1,9 @@
 "use server"
 
-import { db } from "@/lib/db"
-import { reviews, orders, orderLines } from "@/lib/db/schema"
+import { db } from "@/backend/db"
+import { reviews, orders, orderLines } from "@/backend/db"
 import { and, eq } from "drizzle-orm"
-import { createNotification } from "@/lib/notifications"
+import { createNotification } from "@/backend/notifications"
 
 export type SubmitReviewInput = {
   productId: number

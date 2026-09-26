@@ -1,11 +1,11 @@
 "use server"
 
-import { db } from "@/lib/db"
-import { orders, orderLines, productCombinations, products } from "@/lib/db/schema"
+import { db } from "@/backend/db"
+import { orders, orderLines, productCombinations, products } from "@/backend/db"
 import { eq, inArray } from "drizzle-orm"
 import { effectivePriceCents } from "@/lib/money"
-import { generateOrderCode } from "@/lib/store/order-code"
-import { createNotification, sendBusinessEmail } from "@/lib/notifications"
+import { generateOrderCode } from "@/backend/store"
+import { createNotification, sendBusinessEmail } from "@/backend/notifications"
 import { formatMoney } from "@/lib/money"
 
 export type SubmitOrderItem = { combinationId: number; quantity: number }

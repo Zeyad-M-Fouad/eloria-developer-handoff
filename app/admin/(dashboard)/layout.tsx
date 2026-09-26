@@ -1,4 +1,4 @@
-import { requireAdmin } from "@/lib/admin/guard"
+import { requireAdmin } from "@/backend/admin"
 import { AdminSidebar } from "@/components/admin/admin-sidebar"
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {

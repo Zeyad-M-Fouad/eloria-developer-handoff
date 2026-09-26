@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server"
 import { headers } from "next/headers"
-import { auth } from "@/lib/auth"
-import { getOrders, ORDER_STATES, type OrderState } from "@/lib/admin/queries"
+import { auth } from "@/backend/auth"
+import { getOrders, ORDER_STATES, type OrderState } from "@/backend/admin"
 import { ORDER_STATE_LABELS, PAYMENT_STATE_LABELS } from "@/lib/admin/labels"
 
 export const dynamic = "force-dynamic"
